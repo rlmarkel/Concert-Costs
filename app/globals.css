@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  min-height: 100%;
+}
+
+html {
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+@layer components {
+  .page-title {
+    @apply text-2xl font-bold tracking-tight sm:text-3xl;
+  }
+
+  .page-subtitle {
+    @apply mt-1 text-sm sm:text-base;
+    color: color-mix(in oklab, var(--color-base-content) 70%, transparent);
+  }
+
+  .card-elevated {
+    @apply rounded-box bg-base-100 shadow-md transition-all duration-300 hover:shadow-lg;
+  }
+
+  .card-interactive {
+    @apply card-elevated border hover:-translate-y-0.5;
+    border-color: color-mix(in oklab, var(--color-base-300) 50%, transparent);
+  }
+
+  .section-heading {
+    @apply flex items-center gap-2 text-lg font-semibold;
+  }
+
+  .section-number {
+    @apply flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-content;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
