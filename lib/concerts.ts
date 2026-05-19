@@ -17,3 +17,21 @@ export async function getUserConcerts(): Promise<ConcertWithMetrics[]> {
 
   return ((data ?? []) as ConcertRow[]).map(withMetrics);
 }
+
+export async function getConcertById(
+  id: string
+): Promise<ConcertWithMetrics | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("concerts")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error || !data) {
+    if (error) console.error("Failed to load concert:", error.message);
+    return null;
+  }
+
+  return withMetrics(data as ConcertRow);
+}

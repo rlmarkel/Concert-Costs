@@ -1,13 +1,15 @@
 "use client";
 
+import Link from "next/link";
 import {
   formatCurrency,
   formatDate,
   getTopCostCategories,
   totalCost,
 } from "@/lib/concert-calculations";
+import { stateDisplayName, normalizeState } from "@/lib/us-states";
 import type { ConcertWithMetrics } from "@/types/concert";
-import { MapPin, Star } from "lucide-react";
+import { ExternalLink, MapPin, Pencil, Star } from "lucide-react";
 import { motion } from "framer-motion";
 
 function FunRatingBar({ rating }: { rating: number }) {
@@ -28,11 +30,7 @@ function FunRatingBar({ rating }: { rating: number }) {
   );
 }
 
-function CostBreakdown({
-  concert,
-}: {
-  concert: ConcertWithMetrics;
-}) {
+function CostBreakdown({ concert }: { concert: ConcertWithMetrics }) {
   const categories = getTopCostCategories(concert, 4);
   const total = totalCost(concert) || 1;
 
@@ -65,33 +63,70 @@ function CostBreakdown({
   );
 }
 
-export function ConcertCard({ concert }: { concert: ConcertWithMetrics }) {
+export function ConcertCard({
+  concert,
+  highlighted = false,
+}: {
+  concert: ConcertWithMetrics;
+  highlighted?: boolean;
+}) {
+  const stateCode = normalizeState(concert.state);
+  const stateLabel = stateCode
+    ? stateDisplayName(stateCode)
+    : concert.state;
+
   return (
     <motion.article
+      id={`concert-${concert.id}`}
       layout
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="card-interactive border-l-4 border-l-primary"
+      className={`card-interactive border-l-4 border-l-primary scroll-mt-28 ${
+        highlighted
+          ? "ring-2 ring-primary ring-offset-2 ring-offset-base-100"
+          : ""
+      }`}
     >
       <section className="card-body gap-4">
         <header className="flex flex-wrap items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
             <h2 className="card-title text-lg leading-tight">
-              {concert.concert_name}
+              <Link
+                href={`/concerts/${concert.id}`}
+                className="hover:text-primary"
+              >
+                {concert.concert_name}
+              </Link>
             </h2>
             <p className="text-sm text-base-content/70">{concert.artist}</p>
           </div>
-          <span className="badge badge-primary gap-1 shrink-0">
-            <Star className="h-3 w-3" />
-            {concert.fun_rating}/10
-          </span>
+          <div className="flex shrink-0 items-center gap-1">
+            <Link
+              href={`/concerts/${concert.id}`}
+              className="btn btn-ghost btn-xs btn-square"
+              title="Full details"
+            >
+              <ExternalLink className="h-4 w-4" />
+            </Link>
+            <Link
+              href={`/concerts/${concert.id}/edit`}
+              className="btn btn-ghost btn-xs btn-square"
+              title="Edit concert"
+            >
+              <Pencil className="h-4 w-4" />
+            </Link>
+            <span className="badge badge-primary gap-1">
+              <Star className="h-3 w-3" />
+              {concert.fun_rating}/10
+            </span>
+          </div>
         </header>
 
         <p className="flex items-center gap-1 text-sm text-base-content/80">
           <MapPin className="h-4 w-4 shrink-0" aria-hidden />
           <span className="truncate">
-            {concert.venue} · {concert.city}, {concert.state}
+            {concert.venue} · {concert.city}, {stateLabel}
           </span>
         </p>
         <p className="text-sm font-medium">{formatDate(concert.concert_date)}</p>

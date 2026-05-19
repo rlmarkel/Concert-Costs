@@ -39,6 +39,48 @@ html {
   }
 }
 
+/* Leaflet map pins */
+.map-pin {
+  position: relative;
+  width: 32px;
+  height: 42px;
+}
+
+.map-pin-dot {
+  display: block;
+  width: 28px;
+  height: 28px;
+  margin: 0 auto;
+  border-radius: 50% 50% 50% 0;
+  background: var(--color-primary, oklch(var(--p)));
+  transform: rotate(-45deg);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 25%);
+}
+
+.map-pin-badge {
+  position: absolute;
+  top: -4px;
+  right: -2px;
+  min-width: 18px;
+  padding: 0 4px;
+  border-radius: 9999px;
+  background: var(--color-primary-content, #fff);
+  color: var(--color-primary, #570df8);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 20%);
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: var(--radius-box, 1rem);
+}
+
+.leaflet-popup-content {
+  margin: 12px 14px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -2,27 +2,31 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, ListMusic, PlusCircle } from "lucide-react";
+import { BarChart3, ListMusic, MapPin, PlusCircle } from "lucide-react";
 
 const links = [
-  { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
-  { href: "/add", label: "Add Concert", icon: PlusCircle },
-  { href: "/concerts", label: "My Concerts", icon: ListMusic },
+  { href: "/dashboard", label: "Dashboard", shortLabel: "Home", icon: BarChart3 },
+  { href: "/add", label: "Add Concert", shortLabel: "Add", icon: PlusCircle },
+  { href: "/concerts", label: "My Concerts", shortLabel: "List", icon: ListMusic },
+  { href: "/map", label: "Map", shortLabel: "Map", icon: MapPin },
 ];
 
 function NavLink({
   href,
   label,
+  shortLabel,
   icon: Icon,
   active,
   compact,
 }: {
   href: string;
   label: string;
+  shortLabel: string;
   icon: typeof BarChart3;
   active: boolean;
   compact?: boolean;
 }) {
+  const displayLabel = compact ? shortLabel : label;
   return (
     <Link
       href={href}
@@ -34,7 +38,7 @@ function NavLink({
     >
       <Icon className={`h-5 w-5 shrink-0 ${active ? "" : "opacity-80"}`} />
       <span className={compact ? "text-[10px] leading-tight sm:text-sm" : ""}>
-        {label}
+        {displayLabel}
       </span>
     </Link>
   );
